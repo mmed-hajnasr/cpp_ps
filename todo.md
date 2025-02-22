@@ -1,0 +1,4 @@
+- [ ] lca.
+- [ ] centoid decomposition.
+- [ ] rerooting techniques.
+- [ ] suffix array. 

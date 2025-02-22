@@ -1,0 +1,129 @@
+snippet sc "scan a variable" bA
+  ${1:ll} ${2:n};
+  cin >> $2;
+snippet 2sc "scan 2 variables" bA
+  ${1:ll} ${2}, ${3};
+  cin >> $2 >> $3;
+snippet 3sc "scan 3 variables" bA
+  ${1:ll} ${2}, ${3}, ${4};
+  cin >> $2 >> $3 >> $4;
+snippet 4sc "scan 4 variables" bA
+  ${1:ll} ${2}, ${3}, ${4}, ${5};
+  cin >> $2 >> $3 >> $4 >> $5;
+snippet asc "scan an array" bA
+  vector<${1:ll}> ${2}(${3});
+  for (int i = 0; i < $3; i++) 
+	  cin >> $2[i];
+snippet lwr "output a line" bA
+  cout << ${1} << endl;
+snippet wr "output an array" bA
+  for (ll i = 0; i < ${1}; i++) 
+	  cout << ${2}[i] << ' ';
+  cout << endl;
+snippet no "Output no" bA
+  cout << "NO" << endl;
+snippet yes "Output yes" bA
+  cout << "YES" << endl;
+snippet iter "iterate over a list" bA
+  for (auto ${1} : ${2}) {
+	  $0
+  }
+snippet for "for loop" bA
+  for (ll ${1:i} = 0; $1 < ${2}; $1++) {
+	  $0
+  }
+snippet vec "declare vector" bA
+  vector<${1}> ${2};
+
+# snippets
+
+snippet dfs "basic lambda dfs"
+  function<void(ll)> dfs = [&](ll i) {
+    vis[i] = true;
+    for (auto child : graph[i]) {
+      if (!vis[child]) {
+        dfs(child);
+      }
+    }
+  };
+snippet factorazation
+	vector<ll> sieve(N, 1);
+	vector<ll> spf(N, INF);
+	void preproc() {
+	  for (int i = 2; i < N; i++) {
+		if (sieve[i] == 1) {
+		  for (int j = i; j < N; j += i) {
+			spf[j] = min(spf[j], i);
+			sieve[j]++;
+		  }
+		}
+	  }
+	}
+
+	vector<ll> factors(int n) {
+	  vector<ll> ans;
+	  while (n != 1) {
+		ans.push_back(spf[n]);
+		n /= spf[n];
+	  }
+	  return ans;
+	}
+snippet xor-basis
+	struct Basis {
+	  static const int B = 20;
+	  int a[B];
+	  int rank;
+	  Basis() {
+		memset(a, 0, sizeof a);
+		rank = 0;
+	  }
+	  bool insert(int x) {
+		for (int i = B - 1; i >= 0; i--) {
+		  if (x >> i & 1) {
+			if (a[i])
+			  x ^= a[i];
+			else {
+			  a[i] = x;
+			  rank++;
+			  return true;
+			}
+		  }
+		}
+		return false;
+	  }
+	  int max_xor(int ans = 0) {
+		for (int i = B - 1; i >= 0; i--) {
+		  ans = max(ans, ans ^ a[i]);
+		}
+		return ans;
+	  }
+
+	  void reduced_row_echelon_form() {
+		for (int i = 0; i < B; i++) {
+		  if (!a[i])
+			continue;
+		  for (int j = i + 1; j < B; j++) {
+			if (a[j] >> i & 1)
+			  a[j] ^= a[i];
+		  }
+		}
+	  }
+	  // max xor after trasforming into reduced row echelon form
+	  int max_xor2(int x = 0) {
+		int ans = 0;
+		for (int i = B - 1; i >= 0; i--) {
+		  if (~x >> i & 1) {
+			ans ^= a[i];
+		  }
+		}
+		return ans;
+	  }
+
+	  Basis merge(Basis &b) {
+		Basis ans = *this;
+		for (int i = 0; i < B; i++) {
+		  ans.insert(b.a[i]);
+		}
+		return ans;
+	  }
+	};
